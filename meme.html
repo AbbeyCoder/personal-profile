@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator App</title>
+  <!-- 
+    Objective: The goal of this project is to build a Calculator App using HTML, CSS, and JavaScript. 
+    The application allows users to perform basic arithmetic operations like addition, subtraction, multiplication, and division. 
+    It includes a display screen, digit buttons (0-9), operation buttons (+, -, *, /), a clear button, and an equal button (=) to compute the result.
+  -->
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+
+    /* Calculator Container */
+    .calculator {
+      background-color: #333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 300px;
+    }
+
+    /* Display Screen */
+    .display {
+      background-color: #222;
+      color: #fff;
+      font-size: 2rem;
+      text-align: right;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .buttons button {
+      background-color: #444;
+      color: #fff;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 5px;
+      padding: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .buttons button:hover {
+      background-color: #555;
+    }
+
+    .buttons button:active {
+      background-color: #666;
+    }
+
+    .buttons button.operator {
+      background-color: #ff9500;
+    }
+
+    .buttons button.operator:hover {
+      background-color: #ffaa33;
+    }
+
+    .buttons button.operator:active {
+      background-color: #cc7a00;
+    }
+
+    .buttons button.clear {
+      background-color: #ff3b30;
+      grid-column: span 2;
+    }
+
+    .buttons button.clear:hover {
+      background-color: #ff5c52;
+    }
+
+    .buttons button.clear:active {
+      background-color: #cc2e25;
+    }
+
+    .buttons button.equal {
+      background-color: #34c759;
+      grid-column: span 2;
+    }
+
+    .buttons button.equal:hover {
+      background-color: #4cd964;
+    }
+
+    .buttons button.equal:active {
+      background-color: #2a9d4a;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <!-- Display Screen -->
+    <div class="display" id="display">0</div>
+
+    <!-- Buttons -->
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button class="operator" onclick="appendOperator('/')">/</button>
+      <button class="operator" onclick="appendOperator('*')">*</button>
+      <button onclick="appendNumber(7)">7</button>
+      <button onclick="appendNumber(8)">8</button>
+      <button onclick="appendNumber(9)">9</button>
+      <button class="operator" onclick="appendOperator('-')">-</button>
+      <button onclick="appendNumber(4)">4</button>
+      <button onclick="appendNumber(5)">5</button>
+      <button onclick="appendNumber(6)">6</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
+      <button onclick="appendNumber(1)">1</button>
+      <button onclick="appendNumber(2)">2</button>
+      <button onclick="appendNumber(3)">3</button>
+      <button class="equal" onclick="calculateResult()">=</button>
+      <button onclick="appendNumber(0)">0</button>
+      <button onclick="appendNumber('.')">.</button>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript for Calculator Functionality
+    let display = document.getElementById('display');
+    let currentInput = '';
+    let operator = null;
+    let previousInput = '';
+
+    // Append a number or decimal to the display
+    function appendNumber(number) {
+      if (currentInput.includes('.') && number === '.') return; // Prevent multiple decimals
+      currentInput += number;
+      updateDisplay();
+    }
+
+    // Append an operator
+    function appendOperator(op) {
+      if (currentInput === '') return; // Prevent operator without input
+      if (previousInput !== '') calculateResult(); // Calculate if there's a previous input
+      operator = op;
+      previousInput = currentInput;
+      currentInput = '';
+    }
+
+    // Calculate the result
+    function calculateResult() {
+      if (operator === null || currentInput === '') return; // Prevent calculation without input
+      let result;
+      const prev = parseFloat(previousInput);
+      const current = parseFloat(currentInput);
+
+      switch (operator) {
+        case '+':
+          result = prev + current;
+          break;
+        case '-':
+          result = prev - current;
+          break;
+        case '*':
+          result = prev * current;
+          break;
+        case '/':
+          result = prev / current;
+          break;
+        default:
+          return;
+      }
+
+      currentInput = result.toString();
+      operator = null;
+      previousInput = '';
+      updateDisplay();
+    }
+
+    // Clear the display and reset the calculator
+    function clearDisplay() {
+      currentInput = '';
+      operator = null;
+      previousInput = '';
+      updateDisplay();
+    }
+
+    // Update the display screen
+    function updateDisplay() {
+      display.textContent = currentInput || '0';
+    }
+  </script>
+</body>
+</html>
